@@ -64,9 +64,9 @@ public class MainApp extends Application {
         admin = new Admin(1, "Mr.Kalyan", "admin@university.edu");
 
         sys.addStudent(new Student("Aditya Sahu", "001", "Computer Science", 2));
-        sys.addStudent(new Student("Priya Menon", "002", "Computer Science", 2));
-        sys.addStudent(new Student("Ravi Kumar", "003", "Computer Science", 2));
-        sys.addStudent(new Student("Sneha Das", "004", "Computer Science", 2));
+        sys.addStudent(new Student("M.Bhargav", "002", "Computer Science", 2));
+        sys.addStudent(new Student("V.Chetan reddy", "003", "Computer Science", 2));
+        sys.addStudent(new Student("Zaheer syed", "004", "Computer Science", 2));
 
         sys.addFaculty(new Faculty("F001", "Dr.Sarath ", "sarath@amrita.edu", "Computer Science"));
         sys.addFaculty(new Faculty("F002", "Dr. Meena Pillai", "meena@amrita.edu", "Electronics"));
