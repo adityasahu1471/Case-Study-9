@@ -173,6 +173,4 @@ Each member contributed significantly to building a **complete, functional, and 
 
 We thank our faculty and institution for guiding us through this project and helping us understand real-world software development practices.
 
----
 
-⭐ *End of README*
