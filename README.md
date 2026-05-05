@@ -53,7 +53,7 @@ The **Course Feedback System** is a Java-based application designed to collect, 
 
 ### 🔹 4. Zaheer Syed – *Presentation & Documentation*
 
-* Prepared **project presentation (PPT)**
+
 * Documented:
 
   * System design
