@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class FileManager {
 
-    public static void saveFeedbacks(String fileName, ArrayList<Feedback> feedbacks) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+    public static void saveFeedbacks(String "feedback.txt", ArrayList<Feedback> feedbacks) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("feedback.txt"))) {
 
             for (Feedback f : feedbacks) {
                 writer.write(formatFeedback(f));
