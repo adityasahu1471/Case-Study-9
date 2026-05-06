@@ -1,140 +1,117 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.*;
 import java.util.ArrayList;
 
 public class FileManager {
-    private static final String DEFAULT_FILE = "feedback_output.txt";
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static boolean consoleLoggingStarted = false;
 
-    private FileManager() {
-    }
+    public static void saveFeedbacks(String fileName, ArrayList<Feedback> feedbacks) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
 
-    public static void appendOutput(String output) {
-        appendOutput(DEFAULT_FILE, output);
-    }
-
-    public static void appendOutput(String fileName, String output) {
-        try (FileOutputStream writer = new FileOutputStream(fileName, true)) {
-            writer.write(output.getBytes(StandardCharsets.UTF_8));
-            writer.write(System.lineSeparator().getBytes(StandardCharsets.UTF_8));
-        } catch (IOException ex) {
-            System.err.println("Unable to write to file: " + ex.getMessage());
-        }
-    }
-
-    public static void appendFeedback(Feedback feedback) {
-        StringBuilder output = new StringBuilder();
-        output.append(System.lineSeparator());
-        output.append("========== Feedback Submitted ==========").append(System.lineSeparator());
-        output.append("Time     : ").append(LocalDateTime.now().format(DATE_FORMAT)).append(System.lineSeparator());
-        output.append("Student  : ").append(feedback.getStudent().getName())
-                .append(" (").append(feedback.getStudent().getStudentId()).append(")").append(System.lineSeparator());
-        output.append("Course   : ").append(feedback.getCourse().getCourseName())
-                .append(" (").append(feedback.getCourse().getCourseCode()).append(")").append(System.lineSeparator());
-        output.append("Ratings  : ").append(feedback.getRatings()).append(System.lineSeparator());
-        output.append("Average  : ").append(String.format("%.2f", averageOf(feedback))).append(" / 5.00").append(System.lineSeparator());
-        output.append("Comment  : ").append(feedback.getComment().isEmpty() ? "N/A" : feedback.getComment()).append(System.lineSeparator());
-        output.append("========================================");
-        appendOutput(output.toString());
-    }
-
-    public static void appendCourseReport(Course course, ArrayList<Feedback> feedbacks) {
-        StringBuilder output = new StringBuilder();
-        output.append(System.lineSeparator());
-        output.append("========== Course Report ==========").append(System.lineSeparator());
-        output.append("Time            : ").append(LocalDateTime.now().format(DATE_FORMAT)).append(System.lineSeparator());
-        output.append("Course          : ").append(course.getCourseName())
-                .append(" (").append(course.getCourseCode()).append(")").append(System.lineSeparator());
-        output.append("Instructor      : ").append(course.getInstructor()).append(System.lineSeparator());
-        output.append("Total Feedbacks : ").append(feedbacks.size()).append(System.lineSeparator());
-
-        if (feedbacks.isEmpty()) {
-            output.append("No feedbacks submitted for this course.").append(System.lineSeparator());
-        } else {
-            double totalAverage = 0;
-            for (Feedback feedback : feedbacks) {
-                double feedbackAverage = averageOf(feedback);
-                totalAverage += feedbackAverage;
-                output.append(System.lineSeparator());
-                output.append("From     : ").append(feedback.getStudent().getName()).append(System.lineSeparator());
-                output.append("Ratings  : ").append(feedback.getRatings()).append(System.lineSeparator());
-                output.append("Average  : ").append(String.format("%.2f", feedbackAverage)).append(" / 5.00").append(System.lineSeparator());
-                output.append("Comment  : ").append(feedback.getComment().isEmpty() ? "N/A" : feedback.getComment()).append(System.lineSeparator());
+            for (Feedback f : feedbacks) {
+                writer.write(formatFeedback(f));
+                writer.newLine();
             }
-            output.append(System.lineSeparator());
-            output.append("Overall Course Average Rating : ")
-                    .append(String.format("%.2f", totalAverage / feedbacks.size()))
-                    .append(" / 5.00")
-                    .append(System.lineSeparator());
-        }
 
-        output.append("===================================");
-        appendOutput(output.toString());
+            System.out.println("Feedbacks saved successfully.");
+
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
     }
 
+
+    public static void appendFeedback(Feedback f) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("feedback.txt", true))) {
+
+            writer.write(formatFeedback(f));
+            writer.newLine();
+
+            System.out.println("Feedback appended successfully.");
+
+        } catch (IOException e) {
+            System.out.println("Error appending file: " + e.getMessage());
+        }
+    }
+
+    public static void appendCourseReport(Course course, ArrayList<Feedback> list) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("course_report.txt", true))) {
+
+            writer.write("===== Course Report =====");
+            writer.newLine();
+            writer.write("Course: " + course.getCourseName() + " (" + course.getCourseCode() + ")");
+            writer.newLine();
+            writer.write("Instructor: " + course.getInstructor());
+            writer.newLine();
+            writer.write("Total Feedbacks: " + list.size());
+            writer.newLine();
+
+            double total = 0;
+
+            for (Feedback f : list) {
+                writer.write("Student: " + f.getStudent().getName());
+                writer.newLine();
+                writer.write("Ratings: " + f.getRatings());
+                writer.newLine();
+                writer.write("Comment: " + f.getComment());
+                writer.newLine();
+
+                total += f.calculateAverage();
+                writer.write("----------------------");
+                writer.newLine();
+            }
+
+            if (!list.isEmpty()) {
+                writer.write("Overall Average: " + (total / list.size()));
+                writer.newLine();
+            }
+
+            writer.write("=========================");
+            writer.newLine();
+            writer.newLine();
+
+            System.out.println("Course report appended successfully.");
+
+        } catch (IOException e) {
+            System.out.println("Error writing course report: " + e.getMessage());
+        }
+    }
+
+    public static void readFile(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+
+            String line;
+            System.out.println("\n=== File Content ===");
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
     public static void startConsoleLogging() {
-        if (consoleLoggingStarted) {
-            return;
-        }
-
         try {
-            PrintStream currentOut = System.out;
-            PrintStream currentErr = System.err;
-            FileOutputStream fileOutput = new FileOutputStream(DEFAULT_FILE, true);
-            PrintStream teeOut = new PrintStream(new TeeOutputStream(currentOut, fileOutput), true, StandardCharsets.UTF_8.name());
-            PrintStream teeErr = new PrintStream(new TeeOutputStream(currentErr, fileOutput), true, StandardCharsets.UTF_8.name());
-            System.setOut(teeOut);
-            System.setErr(teeErr);
-            consoleLoggingStarted = true;
-        } catch (IOException ex) {
-            System.err.println("Unable to start file logging: " + ex.getMessage());
+            PrintStream console = System.out;
+            PrintStream fileOut = new PrintStream(new FileOutputStream("console_log.txt", true));
+
+            PrintStream multi = new PrintStream(new OutputStream() {
+                @Override
+                public void write(int b) throws IOException {
+                    console.write(b);
+                    fileOut.write(b);
+                }
+            });
+
+            System.setOut(multi);
+            System.out.println("Console + File logging started...");
+
+        } catch (IOException e) {
+            System.out.println("Error starting console logging: " + e.getMessage());
         }
     }
-
-    private static double averageOf(Feedback feedback) {
-        ArrayList<Integer> ratings = feedback.getRatings();
-        if (ratings.isEmpty()) {
-            return 0.0;
-        }
-
-        double sum = 0;
-        for (int rating : ratings) {
-            sum += rating;
-        }
-        return sum / ratings.size();
-    }
-
-    private static class TeeOutputStream extends OutputStream {
-        private final OutputStream first;
-        private final OutputStream second;
-
-        private TeeOutputStream(OutputStream first, OutputStream second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        @Override
-        public void write(int value) throws IOException {
-            first.write(value);
-            second.write(value);
-        }
-
-        @Override
-        public void write(byte[] bytes, int offset, int length) throws IOException {
-            first.write(bytes, offset, length);
-            second.write(bytes, offset, length);
-        }
-
-        @Override
-        public void flush() throws IOException {
-            first.flush();
-            second.flush();
-        }
+    private static String formatFeedback(Feedback f) {
+        return "Student: " + f.getStudent().getName() +
+                " | Course: " + f.getCourse().getCourseName() +
+                " | Ratings: " + f.getRatings() +
+                " | Comment: " + f.getComment();
     }
 }
