@@ -15,11 +15,21 @@ public class FeedbackSystem {
         this.feedbacks = new ArrayList<>();
     }
 
-    public ArrayList<Student> getStudents() { return new ArrayList<>(students); }
-    public ArrayList<Faculty> getFaculties() { return new ArrayList<>(faculties); }
-    public ArrayList<Course> getCourses() { return new ArrayList<>(courses); }
-    public ArrayList<Question> getQuestions() { return new ArrayList<>(questions); }
-    public ArrayList<Feedback> getFeedbacks() { return new ArrayList<>(feedbacks); }
+    public ArrayList<Student> getStudents() {
+        return new ArrayList<>(students); 
+    }
+    public ArrayList<Faculty> getFaculties() {
+        return new ArrayList<>(faculties);
+    }
+    public ArrayList<Course> getCourses() { 
+        return new ArrayList<>(courses); 
+    }
+    public ArrayList<Question> getQuestions() { 
+        return new ArrayList<>(questions); 
+    }
+    public ArrayList<Feedback> getFeedbacks() {
+        return new ArrayList<>(feedbacks); 
+    }
 
     public void addStudent(Student s) {
         if (s == null) throw new IllegalArgumentException("Student cannot be null.");
