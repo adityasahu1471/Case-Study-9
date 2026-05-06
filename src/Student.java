@@ -15,11 +15,21 @@ public class Student {
         this.feedbacks = new ArrayList<>();
     }
 
-    public String getName() { return name; }
-    public String getStudentId() { return studentId; }
-    public String getDepartment() { return department; }
-    public int getSemester() { return semester; }
-    public ArrayList<Feedback> getFeedbacks() { return new ArrayList<>(feedbacks); }
+    public String getName() { 
+        return name; 
+    }
+    public String getStudentId() {
+        return studentId;
+    }
+    public String getDepartment() {
+        return department; 
+    }
+    public int getSemester() {
+        return semester; 
+    }
+    public ArrayList<Feedback> getFeedbacks() { 
+        return new ArrayList<>(feedbacks); 
+    }
 
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("Name cannot be empty.");
