@@ -18,13 +18,25 @@ public class Feedback {
         this.comment = "";
     }
 
-    public Student getStudent() { return student; }
-    public Course getCourse() { return course; }
-    public String getComment() { return comment; }
-    public ArrayList<Question> getQuestions() { return new ArrayList<>(questions); }
-    public ArrayList<Integer> getRatings() { return new ArrayList<>(ratings); }
+    public Student getStudent() {
+        return student; 
+    }
+    public Course getCourse() { 
+        return course;
+    }
+    public String getComment() { 
+        return comment;
+    }
+    public ArrayList<Question> getQuestions() { 
+        return new ArrayList<>(questions); 
+    }
+    public ArrayList<Integer> getRatings() { 
+        return new ArrayList<>(ratings); 
+    }
 
-    public void setComment(String comment) { this.comment = comment; }
+    public void setComment(String comment) { 
+        this.comment = comment;
+    }
 
     public void setStudent(Student student) {
         if (student == null) throw new IllegalArgumentException("Student cannot be null.");
