@@ -13,10 +13,18 @@ public class Faculty {
         this.department = department;
     }
 
-    public String getFacultyId() { return facultyId; }
-    public String getFacultyName() { return facultyName; }
-    public String getFacultyMail() { return facultyMail; }
-    public String getDepartment() { return department; }
+    public String getFacultyId() { 
+        return facultyId;
+    }
+    public String getFacultyName() { 
+        return facultyName;
+    }
+    public String getFacultyMail() { 
+        return facultyMail; 
+    }
+    public String getDepartment() {
+        return department;
+    }
 
     public void setFacultyName(String facultyName) {
         if (facultyName == null || facultyName.trim().isEmpty()) throw new IllegalArgumentException("Name cannot be empty.");
